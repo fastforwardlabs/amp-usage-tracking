@@ -2,7 +2,7 @@
 
 This repository contains the project artifacts needed to support usage tracking of Applied Machine Learning Prototype (AMP) repositories using Github API data. Project artifacts include a dashboard built in Cloudera Data Visualization (CDV), a local SQLite database that feeds the dashboard, and data refresh utilities built around the Github API.
 
-![image-20210224105412999](images/AMP Usage Tracking Dashboard.png)
+![dashboard_img](images/AMP_Usage_Tracking_Dashboard.png)
 
 
 
