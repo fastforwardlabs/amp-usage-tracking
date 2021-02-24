@@ -1,0 +1,8 @@
+R
+node_modules
+*.pyc
+__pycache__
+.*
+!.gitignore
+db
+data
