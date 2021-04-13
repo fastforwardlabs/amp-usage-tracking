@@ -27,6 +27,7 @@ AMP_NAMES = [
     "Question_Answering",
     "Active_Learning",
     "MLFlow_Tracking",
+    "Few-Shot_Text_Classification"
 ]
 
 AMP_REPOS = ["cloudera/CML_AMP_" + amp for amp in AMP_NAMES]
