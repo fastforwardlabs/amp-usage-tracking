@@ -27,10 +27,14 @@ AMP_NAMES = [
     "Question_Answering",
     "Active_Learning",
     "MLFlow_Tracking",
-    "Few-Shot_Text_Classification"
+    "Few-Shot_Text_Classification",
+    "Object_Detection_Inference",
+    "Canceled_Flight_Prediction",
+    "Streamlit_on_CML"
 ]
 
 AMP_REPOS = ["cloudera/CML_AMP_" + amp for amp in AMP_NAMES]
+AMP_REPOS.append("cloudera/Applied-ML-Prototypes")
 
 # 1. Get latest 14 day usage - both tracking and referring DFs
 amp_tracking_df, amp_referring_df = get_usage_last_14_days(
