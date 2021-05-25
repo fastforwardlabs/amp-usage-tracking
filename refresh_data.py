@@ -64,6 +64,7 @@ print('---------- SAVED DAILY ARCHIVE ARTIFACTS ------------')
 old_prod_tracking = pd.read_pickle(
     f"data/prod_archive/{yesterday_str}/cumulative_tracking_{yesterday_str}.pkl"
 )
+
 new_prod_tracking = pd.concat([old_prod_tracking, daily_tracking_df])
 
 os.makedirs(f"data/prod_archive/{today_str}", exist_ok=True)
