@@ -19,15 +19,12 @@ def get_usage_last_14_days(gh_token, amp_repos):
     each repository for the last 14 days, and returns as a Pandas DataFrame. It also
     collects aggregate metrics on the sources sites driving traffic to each repo
     over the last 14 days.
-
     Args:
         gh_token (str)
         amp_repos List[str]
-
     Returns:
         amp_tracking_df (pd.DataFrame)
         amp_referring_df (pd_DataFrame)
-
     """
 
     gh = Github(gh_token)
@@ -39,55 +36,68 @@ def get_usage_last_14_days(gh_token, amp_repos):
         gh_repo = gh.get_repo(repo)
 
         # gather referring sites as DF
-        refs = gh_repo.get_top_referrers()
-        ref_data = []
-        for ref in refs:
-            data = {
-                "referrer": ref.referrer,
-                "refs_unique": ref.uniques,
-                "refs_total": ref.count,
-            }
-            ref_data.append(data)
-        ref_df = pd.DataFrame(ref_data)
-        ref_df["repo"] = repo[17:]
-        referring_dfs.append(ref_df)
+        try:
+            refs = gh_repo.get_top_referrers()
+            ref_data = []
+            for ref in refs:
+                data = {
+                    "referrer": ref.referrer,
+                    "refs_unique": ref.uniques,
+                    "refs_total": ref.count,
+                }
+                ref_data.append(data)
+            ref_df = pd.DataFrame(ref_data)
+            ref_df["repo"] = repo[17:]
+            referring_dfs.append(ref_df)
+        except KeyError:
+            print(f'No referrals in last 14 days for {repo}')
+            pass
 
         # gather view activity as DF
-        views = gh_repo.get_views_traffic(per="day")
-        view_data = []
-        for view in views["views"]:
-            data = {
-                "timestamp": view.timestamp,
-                "views_unique": view.uniques,
-                "views_total": view.count,
-            }
-            view_data.append(data)
-        view_df = pd.DataFrame(view_data).set_index("timestamp")
-        idx = pd.date_range(
-            end=pd.to_datetime("today").date().strftime("%m-%d-%Y"),
-            start=(
-                pd.to_datetime("today").date() - datetime.timedelta(days=14)
-            ).strftime("%m-%d-%Y"),
-        )
-        view_df = view_df.reindex(idx, fill_value=0)
+        try:
+            views = gh_repo.get_views_traffic(per="day")
+            view_data = []
+            for view in views["views"]:
+                data = {
+                    "timestamp": view.timestamp,
+                    "views_unique": view.uniques,
+                    "views_total": view.count,
+                }
+                view_data.append(data)
+            view_df = pd.DataFrame(view_data).set_index("timestamp")
+            idx = pd.date_range(
+                end=pd.to_datetime("today").date().strftime("%m-%d-%Y"),
+                start=(
+                    pd.to_datetime("today").date() - datetime.timedelta(days=14)
+                ).strftime("%m-%d-%Y"),
+            )
+            view_df = view_df.reindex(idx, fill_value=0)
+        except KeyError:
+            print(f'No views in last 14 days for {repo}')
+            pass
+            
 
         # gather clone activity as DF
-        clones = gh_repo.get_clones_traffic(per="day")
-        clone_data = []
-        for clone in clones["clones"]:
-            data = {
-                "timestamp": clone.timestamp,
-                "clones_unique": clone.uniques,
-                "clones_total": clone.count,
-            }
-            clone_data.append(data)
+        try:
+            clones = gh_repo.get_clones_traffic(per="day")
+            clone_data = []
+            for clone in clones["clones"]:
+                data = {
+                    "timestamp": clone.timestamp,
+                    "clones_unique": clone.uniques,
+                    "clones_total": clone.count,
+                }
+                clone_data.append(data)
 
-        clone_df = pd.DataFrame(clone_data).set_index("timestamp")
-        clone_df = clone_df.reindex(idx, fill_value=0)
+            clone_df = pd.DataFrame(clone_data).set_index("timestamp")
+            clone_df = clone_df.reindex(idx, fill_value=0)
 
-        # combine DFs
-        activity_df = pd.concat([clone_df, view_df], axis=1)
-        activity_df["repo"] = repo[17:]
+            # combine DFs
+            activity_df = pd.concat([clone_df, view_df], axis=1)
+            activity_df["repo"] = repo[17:]
+        except KeyError:
+            print(f'No clones in last 14 days for {repo}')
+            pass
 
         activity_dfs.append(activity_df)
 
@@ -95,7 +105,6 @@ def get_usage_last_14_days(gh_token, amp_repos):
     amp_referring_df = pd.concat(referring_dfs).reset_index(drop=True)
 
     return amp_tracking_df, amp_referring_df
-
 
 def create_connection(db_file):
     """
