@@ -49,6 +49,10 @@ today_str = datetime.datetime.today().strftime("%m-%d-%Y")
 yesterday_str = (datetime.datetime.today() - datetime.timedelta(days=1)).strftime(
     "%m-%d-%Y"
 )
+
+# uncomment next line and set to today-1 date if a day is missed.
+# yesterday_str = '07-22-2021' 
+
 os.makedirs(f"data/daily_archive/{today_str}", exist_ok=True)
 
 daily_tracking_df.to_pickle(
