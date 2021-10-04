@@ -30,7 +30,8 @@ AMP_NAMES = [
     "Few-Shot_Text_Classification",
     "Object_Detection_Inference",
     "Canceled_Flight_Prediction",
-    "Streamlit_on_CML"
+    "Streamlit_on_CML",
+    "APIv2"
 ]
 
 AMP_REPOS = ["cloudera/CML_AMP_" + amp for amp in AMP_NAMES]
