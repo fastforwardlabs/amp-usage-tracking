@@ -31,7 +31,11 @@ AMP_NAMES = [
     "Object_Detection_Inference",
     "Canceled_Flight_Prediction",
     "Streamlit_on_CML",
-    "APIv2"
+    "APIv2",
+    "AutoML_with_TPOT",
+    "Summarize",
+    "Train_Gensim_W2V",
+    "Tensorboard_on_CML"
 ]
 
 AMP_REPOS = ["cloudera/CML_AMP_" + amp for amp in AMP_NAMES]
