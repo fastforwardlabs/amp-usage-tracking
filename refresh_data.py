@@ -35,7 +35,9 @@ AMP_NAMES = [
     "AutoML_with_TPOT",
     "Summarize",
     "Train_Gensim_W2V",
-    "Tensorboard_on_CML"
+    "Tensorboard_on_CML",
+    "Continuous_Model_Monitoring",
+    "Video_Classification"
 ]
 
 AMP_REPOS = ["cloudera/CML_AMP_" + amp for amp in AMP_NAMES]
@@ -56,7 +58,7 @@ yesterday_str = (datetime.datetime.today() - datetime.timedelta(days=1)).strftim
 )
 
 # uncomment next line and set to today-1 date if a day is missed (or last avaiable date).
-#yesterday_str = '08-24-2021' 
+#yesterday_str = '03-12-2022'
 
 os.makedirs(f"data/daily_archive/{today_str}", exist_ok=True)
 
