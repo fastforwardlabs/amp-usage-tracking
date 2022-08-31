@@ -37,7 +37,9 @@ AMP_NAMES = [
     "Train_Gensim_W2V",
     "Tensorboard_on_CML",
     "Continuous_Model_Monitoring",
-    "Video_Classification"
+    "Video_Classification",
+    "Dask_on_CML",
+    "Intelligent_Writing_Assistance"
 ]
 
 AMP_REPOS = ["cloudera/CML_AMP_" + amp for amp in AMP_NAMES]
