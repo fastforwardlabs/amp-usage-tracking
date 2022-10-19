@@ -31,6 +31,12 @@ def get_usage_last_14_days(gh_token, amp_repos):
 
     activity_dfs = []
     referring_dfs = []
+    idx = pd.date_range(
+        end=pd.to_datetime("today").date().strftime("%m-%d-%Y"),
+        start=(
+            pd.to_datetime("today").date() - datetime.timedelta(days=14)
+        ).strftime("%m-%d-%Y"),
+    )
 
     for repo in amp_repos:
         gh_repo = gh.get_repo(repo)
@@ -65,17 +71,11 @@ def get_usage_last_14_days(gh_token, amp_repos):
                 }
                 view_data.append(data)
             view_df = pd.DataFrame(view_data).set_index("timestamp")
-            idx = pd.date_range(
-                end=pd.to_datetime("today").date().strftime("%m-%d-%Y"),
-                start=(
-                    pd.to_datetime("today").date() - datetime.timedelta(days=14)
-                ).strftime("%m-%d-%Y"),
-            )
             view_df = view_df.reindex(idx, fill_value=0)
         except KeyError:
             print(f'No views in last 14 days for {repo}')
-            pass
-            
+            view_df = pd.DataFrame(index=idx, columns=["views_unique", "views_total"], data=0)
+
 
         # gather clone activity as DF
         try:
@@ -92,12 +92,14 @@ def get_usage_last_14_days(gh_token, amp_repos):
             clone_df = pd.DataFrame(clone_data).set_index("timestamp")
             clone_df = clone_df.reindex(idx, fill_value=0)
 
-            # combine DFs
-            activity_df = pd.concat([clone_df, view_df], axis=1)
-            activity_df["repo"] = repo[17:]
         except KeyError:
             print(f'No clones in last 14 days for {repo}')
-            pass
+            clone_df = pd.DataFrame(index=idx, columns=["clones_unique", "clones_total"], data=0)
+            
+
+        # combine DFs
+        activity_df = pd.concat([clone_df, view_df], axis=1)
+        activity_df["repo"] = repo[17:]
 
         activity_dfs.append(activity_df)
 
